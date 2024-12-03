@@ -1,5 +1,5 @@
 // @ts-nocheck
-const { defineConfig, devices } = require('@playwright/test');
+import { defineConfig, devices } from '@playwright/test';
 import dotenv from "dotenv"
 
 //use multiple env file 
@@ -78,8 +78,8 @@ module.exports = defineConfig({
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
   ],
+  workers: 1,
   workers: 4,
-  timeout: 100000,
   use: {
     //baseURL: 'https://example.com', // Set your base URL if needed
     extraHTTPHeaders: {

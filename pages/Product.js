@@ -19,11 +19,11 @@ class Product {
 
     async acceptCookies() {
         if (await this.cookieBanner.isVisible()) {
-            console.log('Cookie banner detected. Accepting cookies...');
+            console.log('Cookie banner detected. Accepting cookies');
             await this.cookieBanner.click();
         }
         else {
-            console.log('No cookie banner detected. Proceeding...');
+            console.log('No cookie banner detected. Proceeding');
         }
     }
 
@@ -38,30 +38,30 @@ class Product {
         await this.page.waitForSelector('li[role="tab"][class*="cmp-tabs__tab"] >> text=Specification');
     }
 
-   // Method to check if the Specification tab exists
-   async hasSpecificationTab() {
-    try {
-      const specTab = this.page.locator('li[role="tab"][class*="cmp-tabs__tab"] >> text=Specification');
-      const isVisible = await specTab.isVisible(); // Directly use the Locator's isVisible method
-      return isVisible;
-    } catch (error) {
-      console.error('Error checking Specification tab:', error);
-      return false;
+    // Method to check if the Specification tab exists
+    async hasSpecificationTab() {
+        try {
+            const specTab = this.page.locator('li[role="tab"][class*="cmp-tabs__tab"] >> text=Specification');
+            const isVisible = await specTab.isVisible(); // Directly use the Locator's isVisible method
+            return isVisible;
+        } catch (error) {
+            console.error('Error checking Specification tab:', error);
+            return false;
+        }
     }
-  }
 
     // Method to check if the All Model tab exists  // Method to check if the All Model tab exists
-  // Method to check if the All Model tab exists
-  async hasAllModelTab() {
-    try {
-      const allModelTab = this.page.locator('li[role="tab"][class*="cmp-tabs__tab"] >> text=All model');
-      const isVisible = await allModelTab.isVisible(); // Directly use the Locator's isVisible method
-      return isVisible;
-    } catch (error) {
-      console.error('Error checking All Model tab:', error);
-      return false;
+    // Method to check if the All Model tab exists
+    async hasAllModelTab() {
+        try {
+            const allModelTab = this.page.locator('li[role="tab"][class*="cmp-tabs__tab"] >> text=All model');
+            const isVisible = await allModelTab.isVisible(); // Directly use the Locator's isVisible method
+            return isVisible;
+        } catch (error) {
+            console.error('Error checking All Model tab:', error);
+            return false;
+        }
     }
-  }
     async getProductCodes() {
         const rows = await this.page.$$('table.all-models-table tbody tr');
         const productCodes = [];
