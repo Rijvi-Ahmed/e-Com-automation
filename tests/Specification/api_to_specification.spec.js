@@ -3,9 +3,9 @@
 
 import { test, expect } from '@playwright/test';
 import ProductPage from '../../pages/Product';
-import ApiHelper from '../../Utilities/ApiHelper';
+import ApiHelper from '../../utilities/ApiHelper';
 import { chromium } from 'playwright';
-import { compareSpecifications, logResults, compareandconsolidatedSpecsAcrossProducts, sortValues } from '../../Utilities/SpecificationComparator';
+import { compareSpecifications, logResults, compareandconsolidatedSpecsAcrossProducts, sortValues } from '../../utilities/SpecificationComparator';
 
 test.describe('Product Specification check', () => {
 

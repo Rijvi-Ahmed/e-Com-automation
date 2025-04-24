@@ -1,8 +1,8 @@
 import { test, expect, chromium } from '@playwright/test';
 import ProductPage from '../../pages/Product';
-import ApiHelper from '../../Utilities/ApiHelper';
+import ApiHelper from '../../utilities/ApiHelper';
 import { parseStringPromise } from 'xml2js';
-import { compareSpecifications, logResults, compareSpecificationsAcrossProducts } from '../../Utilities/SpecificationComparator';
+import { compareSpecifications, logResults, compareSpecificationsAcrossProducts } from '../../utilities/SpecificationComparator';
 
 test.describe('Sitemap-driven Product Specification Comparison', () => {
 

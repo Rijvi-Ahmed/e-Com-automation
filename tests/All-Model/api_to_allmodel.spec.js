@@ -5,9 +5,9 @@
 
 import { test, expect } from '@playwright/test';
 import ProductPage from '../../pages/Product';
-import ApiHelper from '../../Utilities/ApiHelper';
+import ApiHelper from '../../utilities/ApiHelper';
 import { chromium } from 'playwright';
-import { compareSpecifications, logResults, compareSpecificationsAcrossProducts} from '../../Utilities/SpecificationComparator'
+import { compareSpecifications, logResults, compareSpecificationsAcrossProducts} from '../../utilities/SpecificationComparator'
 
 test.describe('Product Specification Comparison with All Model', () => {
     test('Compare Specefication to All Model for all products', async ({ }) => {
