@@ -2,10 +2,10 @@
 //This program covers the Product Option page's  "Specification" table data
 
 import { test, expect } from '@playwright/test';
-import ProductPage from '../pages/Product';
-import ApiHelper from '../utils/ApiHelper';
+import ProductPage from '../../pages/Product';
+import ApiHelper from '../../Utilities/ApiHelper';
 import { chromium } from 'playwright';
-import { compareSpecifications, logResults } from '../utils/SpecificationComparator';
+import { compareSpecifications, logResults } from '../../Utilities/SpecificationComparator';
 
 test.describe("Product Specification Comparison", () => {
     test('Specification value match from site to backend API', async ({ }) => {

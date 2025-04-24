@@ -2,7 +2,11 @@
   "name": "e-com-automation",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test:product-search": "cross-env ENV=stage npx playwright test tests/search/Product-Search/product_search.spec.js",
+    "test:status-code": "cross-env ENV=stage DEBUG=pw:api npx playwright test tests/Status-Code/status_code_check.spec.js",
+    "test:url-access": "cross-env ENV=stage DEBUG=pw:api npx playwright test tests/Status-Code/access_all_URLs.spec.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -13,6 +17,7 @@
     "@types/node": "^22.5.0",
     "@types/xml2js": "^0.4.14",
     "allure-playwright": "^3.0.0-beta.10",
+    "cross-env": "^7.0.3",
     "eslint-plugin-react": "^7.37.2",
     "globals": "^15.12.0",
     "playwright": "^1.46.1"

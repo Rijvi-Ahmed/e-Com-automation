@@ -13,14 +13,16 @@ dotenv.config({
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
+  timeout: process.env.CI ? 180000 : 180000,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : 4, // Use 1 worker on CI, 4 locally
+  retries: process.env.CI ? 2 : 2,
+  workers: process.env.CI ? 1 : 1, // Use 1 worker on CI, 1 locally
   reporter: 'html',
 
   use: {
-    trace: 'on-first-retry',
-    viewport: { width: 1536, height: 738 },
+    //trace: 'on-first-retry',
+    actionTimeout: 60000,
+    navigationTimeout: 60000,
     extraHTTPHeaders: {
       Authorization: `Basic ${Buffer.from(
         `${process.env.AUTH_USERNAME}:${process.env.AUTH_PASSWORD}`
@@ -31,16 +33,20 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        headless: true,
+        viewport: { width: 1536, height: 738 }, // Let browser use full available screen size
+      },
     },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    /*     {
+          name: 'firefox',
+          use: { ...devices['Desktop Firefox'] },
+        },
+        {
+          name: 'webkit',
+          use: { ...devices['Desktop Safari'] },
+        }, */
 
     // Mobile or branded browsers can be added here if needed
     // {

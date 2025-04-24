@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { cleanup } from '../pages/CookieCleanup';
-import { login} from '../pages/LoginSetup'
-import { ProductPage } from '../pages/ProductPage';
+import { cleanup } from '../../pages/CookieCleanup';
+import { login} from '../../pages/LoginSetup'
+import { ProductPage } from '../../pages/ProductPage';
 
 let browser, context, page, homePage, loginPage, productPage;
 const productName = process.env.PRODUCT_NAME;

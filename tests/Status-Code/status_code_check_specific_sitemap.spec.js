@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { parseStringPromise } from 'xml2js'; // Use ES module syntax for xml2js
 import { chromium } from 'playwright'; // Use ES module syntax for Playwright
-import ProductPage from '../pages/Product';
+import ProductPage from '../../pages/Product';
 import fs from 'fs';
 
 test.setTimeout(0); // Disable global test timeout
@@ -129,10 +129,10 @@ test('Fetch URLs from specific sitemap and access all URLs', async () => {
 
     }
     // Write unsuccessful URLs to a JSON file
-    const unsuccessfulfilePath = './unsuccessful_urls.json';
+    const unsuccessfulfilePath = './tests/Status-Code/unsuccessful_urls.json';
     fs.writeFileSync(unsuccessfulfilePath, JSON.stringify(unsuccessfulURLs, null, 2), 'utf-8');
     console.log(`\nThe ${unsuccessfulURLs.length} unsuccessful URLs have been saved to ${unsuccessfulfilePath}`);
-    const failedfilePath = './fail_to_load_urls.json';
+    const failedfilePath = './tests/Status-Code/fail_to_load_urls.json';
     fs.writeFileSync(failedfilePath, JSON.stringify(failtoLoadURLs, null, 2), 'utf-8');
     console.log(`\nThe ${failtoLoadURLs.length} failed to load URLs have been saved to ${failedfilePath}`);
 

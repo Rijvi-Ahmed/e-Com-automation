@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { parseStringPromise } from 'xml2js'; // Use ES module syntax for xml2js
 import { chromium } from 'playwright'; // Use ES module syntax for Playwright
-import ProductPage from '../pages/Product';
+import ProductPage from '../../pages/Product'
 
 test.setTimeout(0); // Disable global test timeout
 test('Fetch URLs from sitemap and access all URLs', async () => {

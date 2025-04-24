@@ -24,8 +24,8 @@ test('Fetch URLs from sitemap index, process individual sitemaps and check statu
     };
 
     // File paths
-    const unsuccessfulfilePath = './unsuccessful_urls.json';
-    const failedfilePath = './fail_to_load_urls.json';
+    const unsuccessfulfilePath = './tests/Status-Code/unsuccessful_urls.json';
+    const failedfilePath = './tests/Status-Code/fail_to_load_urls.json';    
 
     // Step 1: Set up browser with authentication
     const browser = await chromium.launch({

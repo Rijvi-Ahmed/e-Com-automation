@@ -4,10 +4,10 @@
 //Compare the specification value with the Product page's  "All model" table data
 
 import { test, expect } from '@playwright/test';
-import ProductPage from '../pages/Product';
-import ApiHelper from '../utils/ApiHelper';
+import ProductPage from '../../pages/Product';
+import ApiHelper from '../../Utilities/ApiHelper';
 import { chromium } from 'playwright';
-import { compareSpecifications, logResults, compareSpecificationsAcrossProducts } from '../utils/SpecificationComparator';
+import { compareSpecifications, logResults, compareSpecificationsAcrossProducts} from '../../Utilities/SpecificationComparator'
 
 test.describe('Product Specification Comparison with All Model', () => {
     test('Compare Specefication to All Model for all products', async ({ }) => {

@@ -1,8 +1,11 @@
+//Get and Compare Specification Data from API to Site(Frontend) for each Product(variants)
+//This program covers the Product Option page's  "Specification" table data
+
 import { test, expect } from '@playwright/test';
-import ProductPage from '../pages/Product';
-import ApiHelper from '../utils/ApiHelper';
+import ProductPage from '../../pages/Product';
+import ApiHelper from '../../Utilities/ApiHelper';
 import { chromium } from 'playwright';
-import { compareSpecifications, logResults, compareandconsolidatedSpecsAcrossProducts, sortValues } from '../utils/SpecificationComparator';
+import { compareSpecifications, logResults, compareandconsolidatedSpecsAcrossProducts, sortValues } from '../../Utilities/SpecificationComparator';
 
 test.describe('Product Specification check', () => {
 
