@@ -3,9 +3,9 @@
 
 import { test, expect } from '@playwright/test';
 import ProductPage from '../../pages/Product';
-import ApiHelper from '../../Autilities/ApiHelper';
+import ApiHelper from '../../utilities/ApiHelper';
 import { chromium } from 'playwright';
-import { compareSpecifications, logResults } from '../../Autilities/SpecificationComparator';
+import { compareSpecifications, logResults } from '../../utilities/SpecificationComparator';
 
 test.describe("Product Specification Comparison", () => {
     test('Specification value match from site to backend API', async ({ }) => {
