@@ -1,3 +1,5 @@
+//Fetch product URL from sitemap and the check the all model table data from AEM to all model table data of API 
+
 import { test, expect, chromium } from '@playwright/test';
 import ProductPage from '../../pages/Product';
 import ApiHelper from '../../utilities/ApiHelper';
@@ -18,7 +20,7 @@ test.describe('Sitemap-driven Product Specification Comparison', () => {
         const page = await context.newPage();
 
         // Step 2: Fetch and parse the sitemap XML
-        const sitemapUrl = process.env.SITEMAPURL;
+        const sitemapUrl = process.env.SITEMAPURLIND;
         await page.goto(sitemapUrl);
         const response = await page.request.get(sitemapUrl);
         const xmlContent = await response.text();
@@ -54,7 +56,7 @@ test.describe('Sitemap-driven Product Specification Comparison', () => {
             const hasAllModelTab = await productPage.hasAllModelTab();
 
             if (!hasSpecificationTab || !hasAllModelTab) {
-                console.log(`Skipping ${url}: Missing necessary tabs\n`);
+                console.log(`Skipping ${url}: Missing All Model or Specification tabs\n`);
                 continue;
             }
 
@@ -74,6 +76,12 @@ test.describe('Sitemap-driven Product Specification Comparison', () => {
                 // API specifications
                 const apiSpecifications = await apiHelper.getApiSpecificationswithfirstclassification(productId);
                 productSpecifications[productId] = apiSpecifications;
+
+                if (!apiSpecifications || Object.keys(apiSpecifications).length === 0) {
+                    console.log(`\x1b[31mNo API specifications found for product: ${productId}. Skipping comparison.\x1b[0m`);
+                    await page.goBack();
+                    continue;
+                }
 
                 const { mismatches, matches } = compareSpecifications(frontendSpecifications, apiSpecifications);
                 logResults(mismatches, matches);

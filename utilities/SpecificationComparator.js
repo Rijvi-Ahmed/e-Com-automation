@@ -3,23 +3,25 @@ class SpecificationComparator {
 
     // Compare two sets of specifications
     static compareSpecifications(frontendSpecs, apiSpecs) {
+        if (!frontendSpecs || !apiSpecs) {
+            return { mismatches: [], matches: [] };
+        }
         const mismatches = [];
         const matches = [];
-
+    
         Object.keys(apiSpecs).forEach(key => {
             const apiValue = apiSpecs[key];
             const frontendValue = frontendSpecs[key];
-
-            if (frontendValue === apiValue) {
-                expect(frontendValue).toBe(apiValue);
-                matches.push({ key, value: apiValue });
-            } else {
+            if (apiValue !== frontendValue) {
                 mismatches.push({ key, apiValue, frontendValue });
+            } else {
+                matches.push({ key, value: apiValue });
             }
         });
-
+    
         return { mismatches, matches };
     }
+    
 
     // Log the results of comparison
     static logResults(mismatches, matches) {

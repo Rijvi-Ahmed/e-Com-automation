@@ -3,14 +3,14 @@ import { Page } from '@playwright/test';
 class Product {
     constructor(page) {
         this.page = page;
-        this.allmodelTab = page.locator('li[role="tab"][class*="cmp-tabs__tab"] >> text=All model');
+        this.allmodelTab = page.locator('li[role="tab"][class*="cmp-tabs__tab"] >> text=All Model');
         this.specificationTab = page.locator('li[role="tab"][class*="cmp-tabs__tab"] >> text=Specification');
         this.cookieBanner = page.locator('//button[@aria-label="Accept all"]');
     }
 
     async gotoProductPage() {
         const baseUrl = process.env.URL;
-        const childUrl = 'qa-base/e-com-automation/transducers/force-sensors/c10-force-sensor';
+        const childUrl = 'qa-base/search-automation/product-search/prewired';
         const cleanedBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
         const fullUrl = new URL(childUrl, cleanedBaseUrl).href;
         await this.page.goto(fullUrl, { timeout: 60000, waitUntil: 'networkidle' });
@@ -29,7 +29,7 @@ class Product {
 
     async clickAllModelTab() {
         await this.allmodelTab.click();
-        await this.page.waitForSelector('li[role="tab"][class*="cmp-tabs__tab"] >> text=All model');
+        await this.page.waitForSelector('li[role="tab"][class*="cmp-tabs__tab"] >> text=All Model');
 
     }
 
@@ -54,7 +54,7 @@ class Product {
     // Method to check if the All Model tab exists
     async hasAllModelTab() {
         try {
-            const allModelTab = this.page.locator('li[role="tab"][class*="cmp-tabs__tab"] >> text=All model');
+            const allModelTab = this.page.locator('li[role="tab"][class*="cmp-tabs__tab"] >> text=All Model');
             const isVisible = await allModelTab.isVisible(); // Directly use the Locator's isVisible method
             return isVisible;
         } catch (error) {
@@ -74,7 +74,8 @@ class Product {
     }
 
     async searchAndClickProduct(productCode) {
-        await this.page.locator('xpath=//span[normalize-space()="All model"]').click();
+        await this.page.getByRole('tab', { name: 'All Model' }).click();
+        //await this.page.locator('xpath=//span[normalize-space()="All Model"]').click();
         // Evaluate the code in the browser context to interact with the DOM
         const result = await this.page.evaluate((code) => {
             // Access the DOM to find the product in the "Code" column by its text

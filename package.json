@@ -5,7 +5,10 @@
   "scripts": {
     "test:product-search": "cross-env ENV=stage npx playwright test tests/search/Product-Search/product_search.spec.js",
     "test:status-code": "cross-env ENV=stage DEBUG=pw:api npx playwright test tests/Status-Code/status_code_check.spec.js",
-    "test:url-access": "cross-env ENV=stage DEBUG=pw:api npx playwright test tests/Status-Code/access_all_URLs.spec.js"
+    "test:url-access": "cross-env ENV=stage DEBUG=pw:api npx playwright test tests/Status-Code/access_all_URLs.spec.js",
+    "test:sitemap-to-allmodel-to-API": "cross-env ENV=stage npx playwright test tests/All-Model/sitemap_to_allmodel.spec.js --debug",
+    "test:sitemap": "cross-env ENV=stage npx playwright test tests/sitemap.spec.js --debug",
+    "test:Allmodel": "cross-env ENV=stage npx playwright test tests/All-Model/api_to_allmodel.spec.js --debug"
   },
   "keywords": [],
   "author": "",
