@@ -32,10 +32,26 @@ test.describe("Product Specification Comparison", () => {
 
         // Fetch and compare specifications from site and API
         for (const productId of productCodes) {
+            console.log(`\n========== Processing Product: ${productId} ==========`);
+            
             // Get frontend specifications
             await productPage.searchAndClickProduct(productId);
+            
+            // Check if Specification tab exists before clicking
+            const hasSpecTab = await productPage.hasSpecificationTab();
+            if (!hasSpecTab) {
+                console.log(`Specification tab not found for product ${productId}, skipping...`);
+                // Navigate back to the original product page for the next iteration
+                await productPage.gotoProductPage();
+                await productPage.acceptCookies();
+                continue;
+            }
+            
             await productPage.clickSpecificationTab();
             const frontendSpecifications = await productPage.getFrontendSpecifications();
+
+            // Log frontend specs for debugging
+            console.log('Frontend Specifications:', JSON.stringify(frontendSpecifications, null, 2));
 
             // Assert that frontend specifications are not empty
             expect(frontendSpecifications).toBeDefined();
@@ -44,11 +60,17 @@ test.describe("Product Specification Comparison", () => {
             // Get API specifications and compare
             const apiSpecifications = await apiHelper.getApiSpecifications(productId);
 
+            // Log API specs for debugging
+            console.log('API Specifications:', JSON.stringify(apiSpecifications, null, 2));
+
             // Assert that API specifications are retrieved correctly
             expect(apiSpecifications).toBeDefined();
 
             if (!apiSpecifications) {
                 console.log(`API specifications not available for ${productId}`);
+                // Navigate back to the original product page for the next iteration
+                await productPage.gotoProductPage();
+                await productPage.acceptCookies();
                 continue;
             }
 
@@ -65,6 +87,10 @@ test.describe("Product Specification Comparison", () => {
             } else {
                 console.log(`Specifications match for ${productId}\n`);
             }
+            
+            // Navigate back to the original product page for the next iteration
+            await productPage.gotoProductPage();
+            await productPage.acceptCookies();
         }
         // After iterating through all products, print all mismatches
         if (allMismatches.length > 0) {

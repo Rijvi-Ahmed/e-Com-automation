@@ -1,6 +1,6 @@
 // Get & Compare Specification Data from API and Site(Frontend) for each Product.
 //Get the specification value from API and Compare it with all model table value from site(Frontend) based on each products(variants).
-//This program covers the Product Option page's  "All model" table data
+//This program covers the Product page's  "All model" table data
 //Compare the specification value with the Product page's  "All model" table data
 
 import { test, expect } from '@playwright/test';

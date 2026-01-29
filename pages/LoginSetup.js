@@ -2,7 +2,7 @@ import { chromium } from '@playwright/test';
 import fs from 'fs';
 import { HomePage } from '../pages/HomePage'; // Adjust the path as necessary
 import { LoginPage } from '../pages/LoginPage'; // Adjust the path as necessary
-import { ProductPage } from '../pages/ProductPage'; // Adjust the path as necessary
+import { Product as ProductPage } from '../pages/Product'; // Adjust the path as necessary
 
 const baseurl = process.env.URL;
 async function initializeBrowser() {

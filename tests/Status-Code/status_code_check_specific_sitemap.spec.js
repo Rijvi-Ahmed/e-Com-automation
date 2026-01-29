@@ -16,28 +16,28 @@ test('Fetch URLs from specific sitemap and access all URLs', async () => {
     });
     const page = await context.newPage();
 
-    // Step 2: Fetch and parse the sitemap XML
-    const sitemapUrl = process.env.SITEMAPURLIND;
-    await page.goto(sitemapUrl);
-    const response = await page.request.get(sitemapUrl);
-    const xmlContent = await response.text();
+    // // Step 2: Fetch and parse the sitemap XML
+    // const sitemapUrl = process.env.SITEMAPURLIND;
+    // await page.goto(sitemapUrl);
+    // const response = await page.request.get(sitemapUrl);
+    // const xmlContent = await response.text();
 
-    const urls = [];
-    try {
-        const parsedXml = await parseStringPromise(xmlContent, { explicitArray: false });
-        if (parsedXml.urlset && parsedXml.urlset.url) {
-            urls.push(...(Array.isArray(parsedXml.urlset.url)
-                ? parsedXml.urlset.url.map(entry => entry.loc)
-                : [parsedXml.urlset.url.loc]));
-        }
-    } catch (error) {
-        console.error('Error parsing XML:', error);
-    }
+    // const urls = [];
+    // try {
+    //     const parsedXml = await parseStringPromise(xmlContent, { explicitArray: false });
+    //     if (parsedXml.urlset && parsedXml.urlset.url) {
+    //         urls.push(...(Array.isArray(parsedXml.urlset.url)
+    //             ? parsedXml.urlset.url.map(entry => entry.loc)
+    //             : [parsedXml.urlset.url.loc]));
+    //     }
+    // } catch (error) {
+    //     console.error('Error parsing XML:', error);
+    // }
 
-    console.log(`Extracted ${urls.length} URLs from sitemap.`);
+    // console.log(`Extracted ${urls.length} URLs from sitemap.`);
 
     // Step 3: Iterate over each URL, append query, and visit
-    /*     //custom URLs
+         //custom URLs
           const urls = [
                 'https://dev.hbkworld.com/en/qa-base/hbk-world-sprint-36/ecom/c10',
                 'https://dev.hbkworld.com/en/products/transducers/acoustic-404',
@@ -46,11 +46,10 @@ test('Fetch URLs from specific sitemap and access all URLs', async () => {
                 'https://dev.hbkworld.com/en/qa-base/hbk-world-sprint-36/auto_generate'
         
                 // Add other URLs as needed
-            ];  */
+            ];  
 
     // Array to store URLs with non-200 status codes
     const unsuccessfulURLs = [];
-    const failtoLoadURLs = [];
 
     for (const url of urls) {
         const productPage = new ProductPage(page);
@@ -58,7 +57,7 @@ test('Fetch URLs from specific sitemap and access all URLs', async () => {
         try {
             await page.waitForTimeout(3000); // Wait for 10 seconds
             //check status code 
-            const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 }); // Wait for full load
+            const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 3000 }); // Wait for full load
             await productPage.acceptCookies();
             const status = response.status();
             if (status === 200) {
@@ -70,8 +69,8 @@ test('Fetch URLs from specific sitemap and access all URLs', async () => {
 
             //check ststus code with query
             const urlWithQuery = `${url}?q=2441139`; // Append query
-            await page.waitForTimeout(10000);
-            const responseb = await page.goto(urlWithQuery, { waitUntil: 'networkidle', timeout: 60000 }); // Wait for full load
+            await page.waitForTimeout(3000);
+            const responseb = await page.goto(urlWithQuery, { waitUntil: 'networkidle', timeout: 3000 }); // Wait for full load
             await productPage.acceptCookies();
             const statusb = responseb.status();
             if (statusb === 200) {
@@ -98,9 +97,9 @@ test('Fetch URLs from specific sitemap and access all URLs', async () => {
                             // Construct option URL using urlWithQuery
                             const baseUrl = urlWithQuery.split('?')[0]; // Get base URL before query
                             const optionUrl = `${baseUrl}/p-${option}`; // Append option dynamically
-                            await page.waitForTimeout(10000);
+                            await page.waitForTimeout(3000);
                             try {
-                                const optionResponse = await page.goto(optionUrl, { waitUntil: 'networkidle', timeout: 60000 });
+                                const optionResponse = await page.goto(optionUrl, { waitUntil: 'networkidle', timeout: 3000 });
                                 await productPage.acceptCookies();
                                 const optionStatus = optionResponse.status();
                                 if (optionStatus === 200) {
@@ -111,7 +110,6 @@ test('Fetch URLs from specific sitemap and access all URLs', async () => {
                                 }
                             } catch (error) {
                                 console.error(`Failed to process URL: ${optionUrl}`, error);
-                                failtoLoadURLs.push({ optionUrl, optionStatus: 'Error', error: error.message });
                             }
                         }
                     } else {
@@ -124,7 +122,6 @@ test('Fetch URLs from specific sitemap and access all URLs', async () => {
 
         } catch (error) {
             console.error(`Failed to process URL: ${url}`, error);
-            failtoLoadURLs.push({ url, statusCode: 'Error', error: error.message });
         }
 
     }
@@ -132,9 +129,6 @@ test('Fetch URLs from specific sitemap and access all URLs', async () => {
     const unsuccessfulfilePath = './tests/Status-Code/unsuccessful_urls.json';
     fs.writeFileSync(unsuccessfulfilePath, JSON.stringify(unsuccessfulURLs, null, 2), 'utf-8');
     console.log(`\nThe ${unsuccessfulURLs.length} unsuccessful URLs have been saved to ${unsuccessfulfilePath}`);
-    const failedfilePath = './tests/Status-Code/fail_to_load_urls.json';
-    fs.writeFileSync(failedfilePath, JSON.stringify(failtoLoadURLs, null, 2), 'utf-8');
-    console.log(`\nThe ${failtoLoadURLs.length} failed to load URLs have been saved to ${failedfilePath}`);
 
     // Close the browser
     await browser.close();

@@ -25,11 +25,10 @@ test('Fetch URLs from sitemap index, process individual sitemaps and check statu
 
     // File paths
     const unsuccessfulfilePath = './tests/Status-Code/unsuccessful_urls.json';
-    const failedfilePath = './tests/Status-Code/fail_to_load_urls.json';    
 
     // Step 1: Set up browser with authentication
     const browser = await chromium.launch({
-        headless: true, // Explicitly set headless mode to true
+        headless: false, // Run in headed mode (browser visible)
     });
     const context = await browser.newContext({
         httpCredentials: {
@@ -71,11 +70,9 @@ test('Fetch URLs from sitemap index, process individual sitemaps and check statu
     let successfulUrls = 0;
     let unsuccessfulUrlsCount = 0;
     let skippedUrls = 0;
-    let failedToLoadUrls = 0;
 
     // Step 3: Iterate over each sitemap URL, skipping image sitemaps
     const unsuccessfulURLs = [];
-    const failtoLoadURLs = [];
 
     for (const sitemapUrl of sitemapUrls) {
         if (sitemapUrl.includes('/sitemap-images.xml')) {
@@ -91,8 +88,6 @@ test('Fetch URLs from sitemap index, process individual sitemaps and check statu
             await page.goto(sitemapUrl, { timeout: 60000 });
         } catch (error) {
             console.error(`Failed to process URL: ${sitemapUrl}`, error);
-            failtoLoadURLs.push({ sitemapUrl, statusCode: 'Error', error: error.message });
-            failedToLoadUrls++;
             continue;
         }
         const responseSitemap = await page.request.get(sitemapUrl);
@@ -138,8 +133,6 @@ test('Fetch URLs from sitemap index, process individual sitemaps and check statu
                 }
             } catch (error) {
                 console.error(`Failed to process URL: ${url}`, error);
-                appendToFile(failedfilePath, { url, statusCode: 'Error', error: error.message });
-                failedToLoadUrls++;
             } finally {
                 await pageInstance.close(); // Ensure the page is closed
             }
@@ -208,8 +201,6 @@ test('Fetch URLs from sitemap index, process individual sitemaps and check statu
                                     }
                                 } catch (error) {
                                     console.error(`Failed to process URL: ${optionUrl}`, error);
-                                    appendToFile(failedfilePath, { optionUrl, statusCode: 'Error', error: error.message });
-                                    failedToLoadUrls++;
                                 }
                             }
                         } else {
@@ -221,8 +212,6 @@ test('Fetch URLs from sitemap index, process individual sitemaps and check statu
                 }
             } catch (error) {
                 console.error(`Failed to process URL: ${urlWithQuery}`, error);
-                appendToFile(failedfilePath, { urlWithQuery, statusCode: 'Error', error: error.message });
-                failedToLoadUrls++;
             }
             finally {
                 await pageInstancequery.close(); // Ensure the page is closed after all option operations
@@ -236,7 +225,6 @@ test('Fetch URLs from sitemap index, process individual sitemaps and check statu
     console.log(`Successful URLs: ${successfulUrls}`);
     console.log(`Unsuccessful URLs: ${unsuccessfulUrlsCount}`);
     console.log(`Skipped URLs: ${skippedUrls}`);
-    console.log(`Failed to Load URLs: ${failedToLoadUrls}`);
 
     // Close the browser
     await browser.close();

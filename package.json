@@ -4,11 +4,15 @@
   "main": "index.js",
   "scripts": {
     "test:product-search": "cross-env ENV=stage npx playwright test tests/search/Product-Search/product_search.spec.js",
-    "test:status-code": "cross-env ENV=stage DEBUG=pw:api npx playwright test tests/Status-Code/status_code_check.spec.js",
+    "test:status-code": "cross-env ENV=stage npx playwright test tests/Status-Code/status_code_check.spec.js --headed",
     "test:url-access": "cross-env ENV=stage DEBUG=pw:api npx playwright test tests/Status-Code/access_all_URLs.spec.js",
     "test:sitemap-to-allmodel-to-API": "cross-env ENV=stage npx playwright test tests/All-Model/sitemap_to_allmodel.spec.js --debug",
     "test:sitemap": "cross-env ENV=stage npx playwright test tests/sitemap.spec.js --debug",
-    "test:Allmodel": "cross-env ENV=stage npx playwright test tests/All-Model/api_to_allmodel.spec.js --debug"
+    "test:Allmodel": "cross-env ENV=stage npx playwright test tests/All-Model/api_to_allmodel.spec.js --debug",
+    "test:status-code-defineURLs": "cross-env ENV=stage npx playwright test tests/Status-Code/status_code_check_specific_sitemap.spec.js --headed",
+    "test:PDP-specification": "cross-env ENV=stage npx playwright test tests/Specification/api_to_each_specification.spec.js --debug",
+    "test:PFP-specification": "cross-env ENV=stage npx playwright test tests/Specification/api_to_specification.spec.js --debug",
+    "test:ecom-predefine": "cross-env ENV=stage npx playwright test tests/E-com/Predefine_product.spec.js --debug"
   },
   "keywords": [],
   "author": "",

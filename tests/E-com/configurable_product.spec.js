@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { cleanup } from '../../pages/CookieCleanup';
 import { login} from '../../pages/LoginSetup'
-import { ProductPage } from '../../pages/ProductPage';
+import { Product as ProductPage } from '../../pages/Product';
 
 let browser, context, page, homePage, loginPage, productPage;
 const productName = process.env.PRODUCT_NAME;
@@ -28,7 +28,7 @@ test.describe("Scenario: SCP user with configurable sellable product", () => {
         console.log(isProductAdded ? 'Product was successfully added to the cart.' : 'Failed to add the product to the cart.'); */
     });
 
- /*    test('Verify save and remove product from CTA side panel', async () => {
+     test('Verify save and remove product from CTA side panel', async () => {
       const productPage = new ProductPage(page);
       await productPage.gotoConfigureProductPage();
       await productPage.searchAndClickProduct(productName);
@@ -61,7 +61,7 @@ test.describe("Scenario: SCP user with configurable sellable product", () => {
           // Add a delay between actions to ensure the state has been properly updated
           await page.waitForTimeout(5000);
       }
-  }); */
+  }); 
 
 
     test("Logout from header", async () => {
