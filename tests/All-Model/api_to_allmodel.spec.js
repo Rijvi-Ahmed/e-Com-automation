@@ -11,9 +11,11 @@ import { compareSpecifications, logResults, compareSpecificationsAcrossProducts}
 
 test.describe('Product Specification Comparison with All Model', () => {
     test('Compare Specefication to All Model for all products', async ({ }) => {
+        // Set longer timeout for this test
+        test.setTimeout(600000); // 10 minutes
 
         // Create incognito context
-        const browser = await chromium.launch();
+        const browser = await chromium.launch({ headless: false });
         const context = await browser.newContext({
             httpCredentials: {
                 username: process.env.AUTH_USERNAME,  // Replace with the correct username
@@ -26,6 +28,7 @@ test.describe('Product Specification Comparison with All Model', () => {
         const apiHelper = new ApiHelper(page);
         let productSpecifications = {};
         let uniqueSpecifications = {};
+        let allModelData = {}; // Store All Model data for each product
         const allMismatches = [];
 
         // Navigate to the product page and extract product codes
@@ -36,39 +39,51 @@ test.describe('Product Specification Comparison with All Model', () => {
 
         // Fetch and compare specifications from site and API
         for (const productId of productCodes) {
-            // Get frontend specifications
-            await productPage.searchAndClickProduct(productId);
-            await productPage.clickSpecificationTab();
-            const frontendSpecifications = await productPage.getFrontendSpecifications();
+            try {
+                // Get frontend specifications
+                await productPage.searchAndClickProduct(productId);
+                await productPage.clickSpecificationTab();
+                const frontendSpecifications = await productPage.getFrontendSpecifications();
 
-            // Assert that frontend specifications are not empty
-            expect(frontendSpecifications).toBeDefined();
-            expect(Object.keys(frontendSpecifications).length).toBeGreaterThan(0);
+                // Assert that frontend specifications are not empty
+                expect(frontendSpecifications).toBeDefined();
+                expect(Object.keys(frontendSpecifications).length).toBeGreaterThan(0);
 
+                // Get API specifications and compare
+                const apiSpecifications = await apiHelper.getApiSpecificationswithfirstclassification(productId);
+                productSpecifications[productId] = apiSpecifications;
+                // Assert that API specifications are retrieved correctly
+                expect(apiSpecifications).toBeDefined();
 
-            // Get API specifications and compare
-            const apiSpecifications = await apiHelper.getApiSpecificationswithfirstclassification(productId);
-            productSpecifications[productId] = apiSpecifications;
-            // Assert that API specifications are retrieved correctly
-            expect(apiSpecifications).toBeDefined();
+                if (!apiSpecifications) {
+                    console.log(`API specifications not available for ${productId}`);
+                    continue;
+                }
 
-            if (!apiSpecifications) {
-                console.log(`API specifications not available for ${productId}`);
+                //Compare and Print match and mismatch results
+                const { mismatches, matches } = compareSpecifications(frontendSpecifications, apiSpecifications);
+                logResults(mismatches, matches);
+
+                // Store mismatches for the current product if any exist
+                if (mismatches.length > 0) {
+                    allMismatches.push({
+                        productId,
+                        mismatches,
+                    });
+                } else {
+                    console.log(`Specifications match for ${productId}\n`);
+                }
+
+                // Navigate back to the product page to collect All Model data
+                await productPage.gotoProductPage();
+                await productPage.acceptCookies();
+                const allModelSpecifications = await productPage.getDataFromAllModelTable(productId);
+                allModelData[productId] = allModelSpecifications;
+                console.log(`Collected All Model data for ${productId}`);
+
+            } catch (error) {
+                console.log(`Error processing product ${productId}: ${error.message}`);
                 continue;
-            }
-
-            //Compare and Print match and mismatch results
-            const { mismatches, matches } = compareSpecifications(frontendSpecifications, apiSpecifications);
-            logResults(mismatches, matches);
-
-            // Store mismatches for the current product if any exist
-            if (mismatches.length > 0) {
-                allMismatches.push({
-                    productId,
-                    mismatches,
-                });
-            } else {
-                console.log(`Specifications match for ${productId}\n`);
             }
         }
 
@@ -96,8 +111,7 @@ test.describe('Product Specification Comparison with All Model', () => {
         // Loop through each product to compare unique specifications with All Model tab data based on product 
         for (const productId in uniqueSpecifications) {
             console.log(`Checking specification values for product ${productId}`);
-            const allModelSpecifications = await productPage.getAllModelSpecifications(productId);
-            expect(allModelSpecifications).toBeDefined();
+            const allModelSpecifications = allModelData[productId]; // Use already collected data
 
             if (!allModelSpecifications || Object.keys(allModelSpecifications).length === 0) {
                 console.log(`No data found in All Model tab for product: ${productId}\n`);

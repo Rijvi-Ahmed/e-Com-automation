@@ -12,7 +12,8 @@
     "test:status-code-defineURLs": "cross-env ENV=stage npx playwright test tests/Status-Code/status_code_check_specific_sitemap.spec.js --headed",
     "test:PDP-specification": "cross-env ENV=stage npx playwright test tests/Specification/api_to_each_specification.spec.js --debug",
     "test:PFP-specification": "cross-env ENV=stage npx playwright test tests/Specification/api_to_specification.spec.js --debug",
-    "test:ecom-predefine": "cross-env ENV=stage npx playwright test tests/E-com/Predefine_product.spec.js --debug"
+    "test:ecom-predefine": "cross-env ENV=stage npx playwright test tests/E-com/Predefine_product.spec.js --debug",
+    "test:allmodel": "cross-env ENV=stage npx playwright test tests/All-Model/api_to_allmodel.spec.js"
   },
   "keywords": [],
   "author": "",

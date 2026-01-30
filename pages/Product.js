@@ -247,6 +247,43 @@ class Product {
         return Object.keys(allModelSpecifications).length > 0 ? allModelSpecifications : null;
     }
 
+    // Get All Model data without navigation (assumes already on the product page)
+    async getDataFromAllModelTable(productCode) {
+        await this.page.waitForSelector('table.all-models-table', { state: 'visible', timeout: 10000 }).catch(() => {
+            console.log('All Models table not found');
+        });
+
+        const allModelSpecifications = {};
+
+        const headerCells = await this.page.$$('table.all-models-table thead tr th');
+        const specHeaders = [];
+
+        for (let i = 1; i < headerCells.length; i++) {
+            const headerText = await headerCells[i].innerText();
+            specHeaders.push(headerText.trim());
+        }
+
+        const rows = await this.page.$$('table.all-models-table tbody tr');
+        for (const row of rows) {
+            const codeElement = await row.$('td:first-child a');
+            if (codeElement) {
+                const code = await codeElement.innerText();
+                if (code.trim() === productCode.trim()) {
+                    const specCells = await row.$$('td');
+
+                    for (let i = 1; i < specCells.length; i++) {
+                        const specValue = await specCells[i].innerText();
+                        const specKey = specHeaders[i - 1];
+                        allModelSpecifications[specKey] = specValue.trim();
+                    }
+                    break;
+                }
+            }
+        }
+
+        return Object.keys(allModelSpecifications).length > 0 ? allModelSpecifications : null;
+    }
+
     // Methods from ProductPage.js
     async adjustQuantity(quantity) {
         await this.page.getByLabel('Decrese').click();
@@ -356,5 +393,5 @@ class Product {
     }
 }
 
-module.exports = Product;
 export { Product };
+export default Product;
